@@ -208,7 +208,7 @@ const CompanyDetailsPage = () => {
         {headerImagePreview && (
           <div>
             <h2 className="text-xl font-semibold mb-2 text-center">Header Image Preview</h2>
-            {headerImagePreview}
+            {/* {headerImagePreview} */}
             <img
               src={headerImagePreview}
               alt="Header Preview"
@@ -219,7 +219,7 @@ const CompanyDetailsPage = () => {
         {favIconPreview && (
           <div>
             <h2 className="text-xl font-semibold mb-2 text-center">Favicon Preview</h2>
-            {favIconPreview}
+            {/* {favIconPreview} */}
             <img
               src={favIconPreview}
               alt="Favicon Preview"
