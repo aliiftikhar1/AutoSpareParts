@@ -7,7 +7,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart, updateQuantity, setCart } from '../../store/cartSlice';
 
 export default function WhatsAppButton() {
-  const phoneNumber = '92310356111';
+  const [companyemail, setcompanyemail]= useState('');
+const [companyphone, setcompanyphone]= useState('');
+const [companyaddress, setcompanyaddress]= useState('');
+const [companywebsite, setcompanywebsite]= useState('');
+const [companyowner, setcompanyowner]= useState('');
+
+useEffect(() => {
+  async function fetchContactInfo() {
+    try {
+      const response = await axios.get('/api/contactinfo');
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const existingContact = response.data[0];
+        console.log("contact data is -----------",existingContact);
+        setcompanyemail(existingContact.email);
+        setcompanyphone(existingContact.phoneNumber);
+        setcompanywebsite(existingContact.website);
+        setcompanyowner(existingContact.owner);
+        setcompanyaddress(existingContact.address);
+      }
+    } catch (error) {
+      console.error('Error fetching contact info:', error);
+    }
+  }
+  fetchContactInfo();
+}, []);
+  const phoneNumber = companyphone ? companyphone : 1122;
   const router = useRouter();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.items);
