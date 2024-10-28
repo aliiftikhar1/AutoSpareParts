@@ -40,7 +40,7 @@ useEffect(() => {
   const [cartVisible, setCartVisible] = useState(false);
 
   const handleClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=Hello%Store2u.ca`;
+    const url = `https://wa.me/${phoneNumber}`;
     window.open(url, '_blank');
   };
 
