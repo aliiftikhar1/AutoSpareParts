@@ -52,7 +52,8 @@ export default function FAQSection() {
     };
 
     return (
-        <div className="w-full px-20 py-10">
+        <div className='bg-black'>
+        <div className="w-full px-20 py-10 bg-white rounded-b-[60px]">
             <h1 className="text-3xl font-semibold mb-6">FAQ's</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* First Column */}
@@ -99,6 +100,7 @@ export default function FAQSection() {
                     ))}
                 </div>
             </div>
+        </div>
         </div>
     );
 }
