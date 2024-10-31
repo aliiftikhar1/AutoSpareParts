@@ -22,20 +22,27 @@ export default function SpareParts() {
     <div className="px-12 py-12">
       <h2 className="text-3xl font-bold mb-6">Spare Parts</h2>
 
-      <div className="grid grid-cols-4 gap-6">
-        {products.map((product) => (
-        
-            <ProductCard
-              image={product.image}
-              title={product.title}
-              description={product.description}
-              price={product.price}
-              cardwidth = '350px'
-              cardHeight= '350px'
-            />
 
-        ))}
-      </div>
-    </div>
+      {/* <div className="flex flex-wrap gap-3 justify-between items-center"> */}
+        <div className="grid grid-cols-5 gap-2">
+
+        
+    {products.map((product) => (
+      <div>
+            <ProductCard
+                image={product.image}
+                title={product.title}
+                description={product.description}
+                price={product.price}
+                cardHeight="300px"
+            />
+            </div>
+      
+    ))}
+</div>
+</div>
+
+
+    // </div>
   );
 }

@@ -44,7 +44,7 @@ export default function ExploreAllVehicleParts() {
       <div className="relative">
         <div ref={sliderRef} className="flex overflow-x-scroll no-scrollbar space-x-4">
           {products.map((product) => (
-            
+            <div className="min-w-[328px]">
               <ProductCard
                 image={product.image}
                 title={product.title}
@@ -53,7 +53,7 @@ export default function ExploreAllVehicleParts() {
                 cardwidth = '350px'
               cardHeight= '350px'
               />
-            
+            </div>
           ))}
         </div>
       </div>
