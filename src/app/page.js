@@ -12,7 +12,13 @@ import BusinessReviewSection from '../components/homepage/businessreviewssection
 import SpareParts from '../components/homepage/spareparts';
 import WhyChooseUs from '../components/homepage/whychooseus';
 import PopularParts from '../components/homepage/PopularParts';
-import Footer from '../components/homepage/Footer'
+import NewArrival from '../components/homepage/NewArrival';
+import WhatOurCustomerSays from '../components/homepage/WhatOurCustomerSays';
+import AllBrands from '../components/homepage/AllBrands';
+import TopRated from '../components/homepage/Toprated';
+import TwoCardsSection from '../components/homepage/TwoCardsSection';
+import FAQSection from '../components/homepage/FAQsection';
+
 
 export default function CustomerPage () {
   // const [formData, setFormData] = useState({});
@@ -30,6 +36,12 @@ export default function CustomerPage () {
       <SpareParts/>
       <WhyChooseUs/>
       <PopularParts/>
+      <NewArrival/>
+      <WhatOurCustomerSays/>
+      <AllBrands/>
+      <TopRated/>
+      <TwoCardsSection/>
+      <FAQSection/>
     </div>
     </Customerlayout>
   );
