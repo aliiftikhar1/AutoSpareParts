@@ -28,7 +28,7 @@ const Header = () => {
           Category
         </button>
         {isCategoryOpen && (
-          <div className="absolute top-full mt-2 bg-white border rounded shadow-lg z-10">
+          <div className="absolute w-32 top-24 mt-2 bg-white border  shadow-lg z-10">
             <ul className="p-2">
               <li className="py-1 px-4 hover:bg-gray-100 cursor-pointer">Toyota</li>
               <li className="py-1 px-4 hover:bg-gray-100 cursor-pointer">Mercedes</li>
@@ -47,7 +47,7 @@ const Header = () => {
             <IoMdArrowDropdown />
           </button>
           {isModelsOpen && (
-            <div className="absolute w-32 top-full mt-2 bg-white border rounded shadow-lg z-10">
+            <div className="absolute w-32 top-full mt-2 bg-white border  shadow-lg z-10">
               <ul className="p-2">
                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Model 1</li>
                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Model 2</li>
