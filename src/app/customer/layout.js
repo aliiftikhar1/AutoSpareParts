@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import TopBar from './components/TopBar';
-import Header from './components/Header';
+import Header from '../../components/homepage/header';
+import Footer from '../../components/homepage/Footer';
+// import Header from './components/Header';
 import BrowseCategories from './components/BrowseCategories';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import '../globals.css'; // Assuming you have global styles
 import WhatsAppButton from './components/whatsappbutton';
+import TopBar from '../../components/homepage/topbar';
 
 const CustomerLayout = ({ children }) => {
   // State to ensure consistent rendering between server and client
@@ -87,7 +89,7 @@ const CustomerLayout = ({ children }) => {
       </head>
       <body>
         <div className="min-h-screen bg-white flex flex-col">
-          <TopBar />
+        <TopBar/>
           <Header />
           <main className="flex-grow">
             {isClient && <WhatsAppButton />}

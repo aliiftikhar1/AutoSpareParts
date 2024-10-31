@@ -1,44 +1,35 @@
 'use client'
 import React from 'react';
-
-import TopCategories from './customer/components/TopCategories';
-import Products from './customer/components/Products';
-import Features from './customer/components/Features';
-import Slider from './customer/components/Carousel';
-import CategoryProductsComponent from './customer/components/CategoryProductsComponent';
 import Customerlayout from './customer/layout';
-import FaqSection from './customer/components/FaqSection';
-import AllProducts from './customer/components/AllProducts';
-import NewArrivals from './customer/components/NewArrivals';
-
+import TopBar from '../components/homepage/topbar';
+import HeroSection from '../components/homepage/herosection';
+import ServiceSection from '../components/homepage/customersupport';
+import ExploreAllVehicleParts from '../components/homepage/ExploreAllVehicleParts';
+import FeatureParts from '../components/homepage/featuredparts';
+import ShopSpareParts from '../components/homepage/ShopSpareParts';
+import ServiceSection2 from '../components/homepage/servicessection';
+import BusinessReviewSection from '../components/homepage/businessreviewssection';
+import SpareParts from '../components/homepage/spareparts';
+import WhyChooseUs from '../components/homepage/whychooseus';
+import PopularParts from '../components/homepage/PopularParts';
+import Footer from '../components/homepage/Footer'
 
 export default function CustomerPage () {
   // const [formData, setFormData] = useState({});
-
   return (
     
     <Customerlayout>
     <div>
-      
-      
-    
-      <Slider/>
-     
-      <main className="p-4">
-      <TopCategories/>
-        <AllProducts/>
-        {/* <CategoryProductsComponent/> */}
-       
-        
-        
-        
-        <Products/>
-        <Features/>
-        <NewArrivals/>
-        {/* <CategoryProductsComponent/> */}
-        <FaqSection/>
-        
-      </main>
+      <HeroSection/>
+      <ServiceSection/>
+      <ExploreAllVehicleParts/>
+      <FeatureParts/>
+      <ShopSpareParts/>
+      <ServiceSection2/>
+      <BusinessReviewSection/>
+      <SpareParts/>
+      <WhyChooseUs/>
+      <PopularParts/>
     </div>
     </Customerlayout>
   );

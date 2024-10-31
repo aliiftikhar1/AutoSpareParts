@@ -52,3 +52,13 @@ body {
 .products-grid::-webkit-scrollbar {
   display: none; /* Hide scrollbar in Chrome, Safari, and Opera */
 }
+
+
+/* CSS for no-scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
