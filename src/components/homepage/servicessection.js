@@ -7,7 +7,7 @@ export default function ServiceSection2(){
             <div>
                 <img src="/images/newsection.jpeg" className="w-full h-full object-cover"></img>
             </div>
-            <div className="bg-[#646464] p-10 text-white">
+            <div className="bg-[#646464] p-10 text-white rounded-r-xl">
     <div>
         <h1 className="text-3xl font-bold text-white mt-10">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.
