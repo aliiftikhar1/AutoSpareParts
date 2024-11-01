@@ -46,7 +46,7 @@ export default function SpareParts() {
       <div>
             <ProductCard
                 image={product.images[0].url}
-                title={product.title}
+                title={product.name}
                 description={product.description}
                 price={product.price}
                 cardHeight="300px"
