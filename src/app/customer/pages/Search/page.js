@@ -1,22 +1,24 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ThreeDots } from 'react-loader-spinner';
 
+import { useRouter } from 'next/navigation';
+
 const SearchPage = () => {
+
+  const router = useRouter();
+  const { query } = router;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Extract query parameters
-  const subcategory = searchParams.get('subcategory') || 'Any';
-  const make = searchParams.get('make') || 'Any';
-  const model = searchParams.get('model') || 'Any';
-  const year = searchParams.get('year') || 'Any';
+  
+  const subcategory = query.subcategory || 'Any';
+  const make = query.make || 'Any';
+  const model = query.model || 'Any';
+  const year = query.year || 'Any';
 
   // Fetch products based on search parameters
   const fetchProducts = useCallback(async () => {
