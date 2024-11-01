@@ -9,7 +9,8 @@ import { ThreeDots } from 'react-loader-spinner';
 const SearchPage = () => {
 
   const router = useRouter();
-  const { query } = router;
+  // const { query } = router;
+  const { query = {} } = router; 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
