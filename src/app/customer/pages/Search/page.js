@@ -3,10 +3,8 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ThreeDots } from 'react-loader-spinner';
-
 import { useRouter } from 'next/navigation';
+import { ThreeDots } from 'react-loader-spinner';
 
 const SearchPage = () => {
 
@@ -14,7 +12,7 @@ const SearchPage = () => {
   const { query } = router;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const subcategory = query.subcategory || 'Any';
   const make = query.make || 'Any';
   const model = query.model || 'Any';
