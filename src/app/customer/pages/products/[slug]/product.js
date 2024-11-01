@@ -11,7 +11,10 @@ import { addToCart, setCart } from '../../../../store/cartSlice';
 import { ThreeDots } from 'react-loader-spinner';
 import Modal from 'react-modal';
 import { FiMinus, FiPlus } from 'react-icons/fi';
-
+import { useRef } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FaStar } from 'react-icons/fa';
+import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 const ProductPage = ({ productData }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -32,6 +35,22 @@ const ProductPage = ({ productData }) => {
   const [comment, setComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
 
+  const thumbnailRef = useRef(null);
+
+  const scrollAmount = 100;
+
+  const handleNext = () => {
+    if (thumbnailRef.current) {
+      thumbnailRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrev = () => {
+    if (thumbnailRef.current) {
+      thumbnailRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   // Fetch product details and related products
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,7 +58,7 @@ const ProductPage = ({ productData }) => {
         setLoading(true); // Start loading when fetching starts
         const response = await axios.get(`/api/products?slug=${product.slug}`);
         const { product: fetchedProduct, relatedProducts } = response.data.data;
-  
+
         setSizes(JSON.parse(fetchedProduct.sizes || '[]'));
         setColors(JSON.parse(fetchedProduct.colors || '[]'));
         setProduct(fetchedProduct);
@@ -50,12 +69,12 @@ const ProductPage = ({ productData }) => {
         setLoading(false); // Stop loading when data is fetched
       }
     };
-  
+
     if (product.slug) {
       fetchProduct();
     }
   }, [product.slug]);
-  
+
 
   // Fetch reviews for the product
   useEffect(() => {
@@ -219,29 +238,12 @@ const ProductPage = ({ productData }) => {
           />
         </div>
       )}
-      <div className="flex flex-wrap items-stretch min-h-screen">
+      <div className="flex flex-wrap items-stretch min-h-screen ">
         {/* Product Images and Details */}
         <div className="w-full lg:w-3/5 mb-0 flex flex-col lg:flex-row h-full">
-          <div className="flex flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-col w-full">
             {/* Image Thumbnails */}
-            <div className="flex w-20 flex-col justify-start items-center mr-4">
-              {product.images &&
-                product.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={getImageUrl(image.url)}
-                    alt={product.name}
-                    className={`w-20 h-20 object-cover mb-2 cursor-pointer ${
-                      index === currentImageIndex ? 'opacity-100' : 'opacity-50'
-                    }`}
-                    onClick={() => handleThumbnailClick(index)}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/placeholder-image.png';
-                    }}
-                  />
-                ))}
-            </div>
+
             {/* Main Image */}
             <div className="relative w-full pl-4">
               {product.images && product.images.length > 0 ? (
@@ -262,6 +264,49 @@ const ProductPage = ({ productData }) => {
                 </div>
               )}
             </div>
+            <div className="relative flex items-center w-[600px] mx-auto">
+              {/* Previous Button */}
+              <button
+                className="absolute left-0 z-10 bg-white rounded-full shadow p-2 hover:bg-gray-200"
+                onClick={handlePrev}
+              >
+                <FiChevronLeft size={24} />
+              </button>
+
+              {/* Thumbnails */}
+              <div
+                className="flex gap-4 items-center overflow-hidden px-10 "
+                ref={thumbnailRef}
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {product.images &&
+                  product.images.map((image, index) => (
+                    <div className='border-[1px] border-black rounded'>
+                      <img
+                        key={index}
+                        src={getImageUrl(image.url)}
+                        alt={product.name}
+                        className={`w-32 h-32 object-contain cursor-pointer ${index === currentImageIndex ? 'opacity-100' : 'opacity-50'
+                          }`}
+                        onClick={() => setCurrentImageIndex(index)}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/placeholder-image.png';
+                        }}
+                      />
+                    </div>
+                  ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                className="absolute right-0 z-10 bg-white rounded-full shadow p-2 hover:bg-gray-200"
+                onClick={handleNext}
+              >
+                <FiChevronRight size={24} />
+              </button>
+            </div>
+
           </div>
         </div>
 
@@ -269,19 +314,29 @@ const ProductPage = ({ productData }) => {
         <div className="w-full lg:w-2/5 h-full flex flex-col">
           <h2 className="text-2xl font-bold mb-4">{product.name.toUpperCase()}</h2>
 
-          <div className="flex items-center mb-4">
+          <div className="flex justify-start items-center mb-4 gap-4">
             {product.discount ? (
-              <>
-                <span className="text-green-500 text-xl line-through mr-4">
-                  Rs.{formatPrice(product.price)}
-                </span>
-                <span className="text-red-500 font-bold text-xl">
+              <div className='flex flex-col'>
+               <span className="text-red-500 font-bold text-xl">
                   Rs.{formatPrice(calculateOriginalPrice(product.price, product.discount))}
                 </span>
-              </>
+                <span className="text-green-500 text-lg line-through mr-4">
+                  Rs.{formatPrice(product.price)}
+                </span>
+               
+              </div>
             ) : (
               <span className="text-red-500 text-2xl">Rs.{formatPrice(product.price)}</span>
             )}
+            <div className='flex flex-col gap-4'>
+            <div className='flex gap-4'>
+              <div className='flex gap-1 justify-center items-center px-2 py-1 bg-yellow-100 rounded-full'><FaStar/> 4 .9</div>
+              <div className=''> <button className='rounded-full px-2 py-1 bg-black text-white flex gap-1'>Review</button></div>
+            </div>
+            <div>
+              <p><span className='text-green-600'>93%</span>of buyers have recommended this</p>
+            </div>
+          </div>
           </div>
 
           {/* Stock Info */}
@@ -301,9 +356,8 @@ const ProductPage = ({ productData }) => {
                   <button
                     key={index}
                     onClick={() => setSelectedColor(color.label)}
-                    className={`w-8 h-8 rounded-full border-2 cursor-pointer ${
-                      selectedColor === color.label ? 'border-black' : 'border-gray-300'
-                    }`}
+                    className={`w-8 h-8 rounded-full border-2 cursor-pointer ${selectedColor === color.label ? 'border-black' : 'border-gray-300'
+                      }`}
                     style={{ backgroundColor: color.hex }}
                     title={color.label}
                   >
@@ -341,6 +395,7 @@ const ProductPage = ({ productData }) => {
           )}
 
           {/* Quantity Selector */}
+          <div className='flex gap-3 justify-center items-center'>
           <div className="flex items-center mb-4 border border-gray-300 rounded-full px-4 py-1 w-32">
             <button
               className="text-gray-700 px-2"
@@ -360,12 +415,13 @@ const ProductPage = ({ productData }) => {
 
           {/* Add to Cart Button */}
           <button
-            className="bg-teal-500 text-white py-2 px-4 rounded-md w-full"
+            className="bg-red-600 text-white py-2 px-4 rounded-full w-full"
             onClick={handleAddToCart}
             disabled={product.stock === 0}
           >
             Add to cart
           </button>
+          </div>
 
           {/* Product Description */}
           <h3 className="text-md font-semibold text-gray-700 mb-4 mt-4">Description</h3>
@@ -419,61 +475,61 @@ const ProductPage = ({ productData }) => {
               <p className="text-gray-500">No reviews yet. Be the first to leave a review!</p>
             )}
 
-            
-<div className="mt-8">
-  <h3 className="text-lg font-semibold mb-4">Leave a Review</h3>
 
-  {/* Check if user is logged in */}
-  {localStorage.getItem('userName') ? (
-    <form onSubmit={handleReviewSubmit}>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="rating">
-          Rating
-        </label>
-        <select
-          id="rating"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          className="w-full p-2 border border-gray-300 rounded"
-          required
-        >
-          <option value="">Select Rating</option>
-          <option value="1">1 Star</option>
-          <option value="2">2 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="5">5 Stars</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="comment">
-          Comment
-        </label>
-        <textarea
-          id="comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
-          rows="4"
-          placeholder="Write your review..."
-          required
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded"
-        disabled={reviewLoading}
-      >
-        {reviewLoading ? 'Submitting...' : 'Submit Review'}
-      </button>
-    </form>
-  ) : (
-    // Show this statement if the user is not logged in
-    <p className="text-gray-500">
-      If you want to leave a review, please <a href="/customer/pages/login" className="text-blue-500">log in</a>.
-    </p>
-  )}
-</div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-4">Leave a Review</h3>
+
+              {/* Check if user is logged in */}
+              {localStorage.getItem('userName') ? (
+                <form onSubmit={handleReviewSubmit}>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="rating">
+                      Rating
+                    </label>
+                    <select
+                      id="rating"
+                      value={rating}
+                      onChange={(e) => setRating(Number(e.target.value))}
+                      className="w-full p-2 border border-gray-300 rounded"
+                      required
+                    >
+                      <option value="">Select Rating</option>
+                      <option value="1">1 Star</option>
+                      <option value="2">2 Stars</option>
+                      <option value="3">3 Stars</option>
+                      <option value="4">4 Stars</option>
+                      <option value="5">5 Stars</option>
+                    </select>
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="comment">
+                      Comment
+                    </label>
+                    <textarea
+                      id="comment"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded"
+                      rows="4"
+                      placeholder="Write your review..."
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                    disabled={reviewLoading}
+                  >
+                    {reviewLoading ? 'Submitting...' : 'Submit Review'}
+                  </button>
+                </form>
+              ) : (
+                // Show this statement if the user is not logged in
+                <p className="text-gray-500">
+                  If you want to leave a review, please <a href="/customer/pages/login" className="text-blue-500">log in</a>.
+                </p>
+              )}
+            </div>
 
           </div>
         </div>
@@ -482,7 +538,7 @@ const ProductPage = ({ productData }) => {
       {/* Related Products Section */}
       <div className="mt-12 mb-8">
         <h3 className="text-2xl font-semibold mb-6">Related Products</h3>
-        <div className="rounded grid grid-cols-2 gap-x-2 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 px-1 sm:px-4 lg:px-0">
+        <div className="rounded grid grid-cols-2 gap-x-2 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 px-1 sm:px-4 lg:px-0">
           {relatedProducts.length > 0 ? (
             relatedProducts.map((relatedProduct) => {
               const originalPrice = calculateOriginalPrice(
@@ -500,12 +556,12 @@ const ProductPage = ({ productData }) => {
                       {relatedProduct.discount.toFixed(2)}% OFF
                     </div>
                   )}
-                  <div className="relative">
+                  <div className="relative overflow-hidden">
                     {relatedProduct.images && relatedProduct.images.length > 0 ? (
                       <motion.img
                         src={getImageUrl(relatedProduct.images[0].url)}
                         alt={relatedProduct.name}
-                        className="h-[240px] w-full object-cover mb-4 rounded bg-white"
+                        className="h-[240px] w-full object-contain mb-4 rounded bg-white"
                         whileHover={{ scale: 1.1 }}
                         transition={{ duration: 0.3 }}
                         onError={(e) => {

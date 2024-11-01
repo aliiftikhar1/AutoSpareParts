@@ -31,6 +31,8 @@ const AddProductPageContent = () => {
     images: [],
     discount: '',
     isTopRated: false,
+    isPopular: false,
+    isFeatured: false,
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
@@ -286,6 +288,8 @@ const AddProductPageContent = () => {
         images: imageUrls, // Send full URLs for validation
         discount: newProduct.discount ? roundToTwoDecimalPlaces(parseFloat(newProduct.discount)) : null,
         isTopRated: newProduct.isTopRated,
+        isPopular: newProduct.isPopular,
+        isFeatured: newProduct.isFeatured,
         meta_title: newProduct.meta_title,
         meta_description: newProduct.meta_description,
         meta_keywords: newProduct.meta_keywords,
@@ -515,7 +519,19 @@ const AddProductPageContent = () => {
                 step="0.01"
               />
             </div>
-
+<div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={newProduct.isFeatured}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, isFeatured: e.target.checked })
+                }
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label className="ml-2 block text-sm text-gray-700">
+                Featured
+              </label>
+            </div>
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -527,6 +543,19 @@ const AddProductPageContent = () => {
               />
               <label className="ml-2 block text-sm text-gray-700">
                 Top Rated
+              </label>
+            </div>
+<div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={newProduct.isPopular}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, isPopular: e.target.checked })
+                }
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label className="ml-2 block text-sm text-gray-700">
+              Popular
               </label>
             </div>
 

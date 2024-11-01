@@ -36,12 +36,56 @@ const FilterableTable = ({
     sizes: [],
     discount: '',
     isTopRated: false,
+    isPopular: false,
+    isFeatured: false,
     images: [],
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
+    makeId: null, // New field
+    modelId: null, // New field
+    yearId: null, // New field
   });
-
+  const [makes, setMakes] = useState([]);
+  const [models, setModels] = useState([]);
+  const [years, setYears] = useState([]);
+  
+  useEffect(() => {
+    fetchMakes();
+    fetchModels();
+    fetchYears();
+  }, []);
+  
+  const fetchMakes = async () => {
+    try {
+      const response = await fetch('/api/make');
+      const data = await response.json();
+      setMakes(data.map(make => ({ value: make.id, label: make.make })));
+    } catch (error) {
+      console.error('Error fetching makes:', error);
+    }
+  };
+  
+  const fetchModels = async () => {
+    try {
+      const response = await fetch('/api/model');
+      const data = await response.json();
+      setModels(data.map(model => ({ value: model.id, label: model.model })));
+    } catch (error) {
+      console.error('Error fetching models:', error);
+    }
+  };
+  
+  const fetchYears = async () => {
+    try {
+      const response = await fetch('/api/year');
+      const data = await response.json();
+      setYears(data.map(year => ({ value: year.id, label: year.year })));
+    } catch (error) {
+      console.error('Error fetching years:', error);
+    }
+  };  
+  
   const [existingImages, setExistingImages] = useState([]);
   const fileInputRef = useRef(null);
   const router = useRouter();
@@ -115,22 +159,27 @@ const FilterableTable = ({
       .filter((size) => item.sizes.includes(size.id))
       .map((size) => ({ value: size.id, label: size.name }));
 
-    setProductForm({
-      name: item.name,
-      slug: item.slug,
-      description: item.description,
-      price: item.price,
-      stock: item.stock,
-      subcategorySlug: item.subcategorySlug,
-      colors: existingColors,
-      sizes: existingSizes,
-      discount: item.discount || '',
-      isTopRated: item.isTopRated || false,
-      images: [], // New images will be handled separately
-      meta_title: item.meta_title || '',
-      meta_description: item.meta_description || '',
-      meta_keywords: item.meta_keywords || '',
-    });
+      setProductForm({
+        name: item.name,
+        slug: item.slug,
+        description: item.description,
+        price: item.price,
+        stock: item.stock,
+        subcategorySlug: item.subcategorySlug,
+        colors: existingColors,
+        sizes: existingSizes,
+        makeId: item.makeId,
+    modelId: item.modelId,
+    yearId: item.yearId,
+        discount: item.discount || '',
+        isTopRated: item.isTopRated || false,
+        isPopular: item.isPopular || false, // Set initial isPopular value
+        isFeatured: item.isFeatured || false, // Set initial isFeatured value
+        images: [],
+        meta_title: item.meta_title || '',
+        meta_description: item.meta_description || '',
+        meta_keywords: item.meta_keywords || '',
+      });
 
     // Store relative paths
     const relativeImageURLs = item.images.map((img) => img.url);
@@ -212,18 +261,24 @@ const FilterableTable = ({
         ...productForm,
         stock: isNaN(stockValue) ? 0 : stockValue,
         images: [
-          ...existingRelativeImages, // Include existing images as relative paths
-          ...uploadedImages, // Include newly uploaded images as relative paths
+          ...existingRelativeImages,
+          ...uploadedImages,
         ],
         discount: productForm.discount ? productForm.discount : null,
         isTopRated: productForm.isTopRated,
+        isPopular: productForm.isPopular, // Add isPopular to productData
+        isFeatured: productForm.isFeatured, // Add isFeatured to productData
         colors: productForm.colors.map((color) => color.value),
         sizes: productForm.sizes.map((size) => size.value),
+        makeId: productForm.makeId,
+        modelId: productForm.modelId,
+        yearId: productForm.yearId,
         meta_title: productForm.meta_title,
         meta_description: productForm.meta_description,
         meta_keywords: productForm.meta_keywords,
-        subcategorySlug: productForm.subcategorySlug, // Ensure subcategorySlug is included
+        subcategorySlug: productForm.subcategorySlug,
       };
+      
 
       console.log("Product data being sent to API:", productData);
 
@@ -556,6 +611,42 @@ const FilterableTable = ({
                   className="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              <div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Make</label>
+  <Select
+    value={makes.find(make => make.value === productForm.makeId)}
+    onChange={(selected) =>
+      setProductForm({ ...productForm, makeId: selected.value })
+    }
+    options={makes}
+    placeholder="Select Make"
+  />
+</div>
+
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Model</label>
+  <Select
+    value={models.find(model => model.value === productForm.modelId)}
+    onChange={(selected) =>
+      setProductForm({ ...productForm, modelId: selected.value })
+    }
+    options={models}
+    placeholder="Select Model"
+  />
+</div>
+
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Year</label>
+  <Select
+    value={years.find(year => year.value === productForm.yearId)}
+    onChange={(selected) =>
+      setProductForm({ ...productForm, yearId: selected.value })
+    }
+    options={years}
+    placeholder="Select Year"
+  />
+</div>
+
 
               {/* Stock */}
               <div className="mb-4">
@@ -605,6 +696,35 @@ const FilterableTable = ({
                   className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              {/* Popular Checkbox */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Popular</label>
+  <input
+    type="checkbox"
+    name="isPopular"
+    checked={productForm.isPopular}
+    onChange={(e) =>
+      setProductForm({ ...productForm, isPopular: e.target.checked })
+    }
+    className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+</div>
+
+{/* Featured Checkbox */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700">Featured</label>
+  <input
+    type="checkbox"
+    name="isFeatured"
+    checked={productForm.isFeatured}
+    onChange={(e) =>
+      setProductForm({ ...productForm, isFeatured: e.target.checked })
+    }
+    className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+</div>
+
 
               {/* Subcategory */}
               <div className="mb-4">

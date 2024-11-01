@@ -11,7 +11,7 @@ export default function NewArrivalCard({ image, name, price, rating, reviews }) 
             
             <div className="relative flex-shrink-0">
                 <img 
-                    src={image} 
+                    src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${image}`} 
                     alt={name} 
                     className="w-28 h-28 rounded-md object-cover"
                 />

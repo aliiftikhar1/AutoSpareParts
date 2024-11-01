@@ -1,24 +1,28 @@
 import React from "react";
 import NewArrivalCard from './NewArrivalCard';
+import { useState,useEffect } from "react";
+import axios from "axios";
 
 export default function TopRated(){
-    const products = [
-        { id: 1, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
-        { id: 2, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", price: "3,000,000" },
-        { id: 3, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", price: "50,000" },
-        { id: 4, image: "/spareparts/spare part (2).png", title: "Brake Disk", description: "Hyundai i20 compatible brake disk", price: "21,800" },
-        { id: 5, image: "/spareparts/spare part (3).png", title: "Pirelli Cinturato P7", description: "Pirelli Cinturato P7 Tyres starting from Rs 42,000", price: "42,000" },
-        { id: 6, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
-        { id: 7, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", price: "3,000,000" },
-        { id: 8, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", price: "50,000" },
-        { id: 9, image: "/spareparts/spare part (2).png", title: "Brake Disk", description: "Hyundai i20 compatible brake disk", price: "21,800" },
-        { id: 10, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
-        { id: 11, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", price: "3,000,000" },
-        { id: 12, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", price: "50,000" },
-        { id: 13, image: "/spareparts/spare part (2).png", title: "Brake Disk", description: "Hyundai i20 compatible brake disk", price: "21,800" },
-        { id: 14, image: "/spareparts/spare part (3).png", title: "Pirelli Cinturato P7", description: "Pirelli Cinturato P7 Tyres starting from Rs 42,000", price: "42,000" },
-        { id: 15, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
-    ];
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('/api/products/topRated');
+
+                console.log("TOP RADET Products are: ", response.data.data);
+                setProducts(response.data.data); // Assuming the API returns products in `data.data`
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+    const calculateDiscountedPrice = (price, discount) => {
+        if (!price || !discount) return price; // If no discount, return original price
+        return price - (price * discount) / 100;
+    };
     return(
         <>
         <div className=" px-12">
@@ -27,9 +31,9 @@ export default function TopRated(){
                 {products.map((product) => (
                     <NewArrivalCard 
                         key={product.id} 
-                        image={product.image} 
-                        name={product.title} 
-                        price={product.price} 
+                        image={product.images[0].url} 
+                        name={product.name} 
+                        price={calculateDiscountedPrice(product.price, product.discount).toLocaleString()}
                         rating={4.5}  // You can replace with actual rating if available
                         reviews={88}  // Replace with actual review count if available
                     />

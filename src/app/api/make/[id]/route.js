@@ -59,7 +59,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = params;
+  const  id  = parseInt(params.id);
 
   try {
     await prisma.make.delete({

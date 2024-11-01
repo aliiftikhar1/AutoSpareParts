@@ -12,7 +12,9 @@ const ProductPage = () => {
   const fetchProducts = async () => {
     try {
       const response = await fetch('/api/products');
+
       const data = await response.json();
+      console.log("Data of products : ",data);
       setProducts(data);
     } catch (error) {
       console.error('Error fetching products:', error);

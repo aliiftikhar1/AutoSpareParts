@@ -1,19 +1,34 @@
 import ProductCard from "./ProductCard";
-import { useState, useRef } from "react";
+import { useState,useEffect, useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import axios from "axios"; // Import axios for API calls
 
 export default function ExploreAllVehicleParts() {
   const [activeTab, setActiveTab] = useState("In Stock");
   const sliderRef = useRef(null);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/api/products');
+        console.log("Products are: ",response.data);
+        setProducts(response.data); // Assuming the API returns products in `data.data`
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
 
-  // Sample data for products
-  const products = [
-    { id: 1, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
-    { id: 2, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", price: "3,000,000" },
-    { id: 3, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", price: "50,000" },
-    { id: 4, image: "/spareparts/spare part (2).png", title: "Break Disk", description: "Hyundai i20 compatible brake disk", price: "21,800" },
-    { id: 5, image: "/spareparts/spare part (3).png", title: "Pirelli Cinturato P7", description: "Pirelli Cinturato P7 Tyres starting from Rs 42,000", price: "42,000" },
-  ];
+    fetchProducts();
+  }, []);
+
+  // // Sample data for products
+  // const products = [
+  //   { id: 1, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", price: "1,200,000" },
+  //   { id: 2, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", price: "3,000,000" },
+  //   { id: 3, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", price: "50,000" },
+  //   { id: 4, image: "/spareparts/spare part (2).png", title: "Break Disk", description: "Hyundai i20 compatible brake disk", price: "21,800" },
+  //   { id: 5, image: "/spareparts/spare part (3).png", title: "Pirelli Cinturato P7", description: "Pirelli Cinturato P7 Tyres starting from Rs 42,000", price: "42,000" },
+  // ];
 
   const scrollLeft = () => {
     sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -44,14 +59,15 @@ export default function ExploreAllVehicleParts() {
       <div className="relative">
         <div ref={sliderRef} className="flex overflow-x-scroll no-scrollbar space-x-4">
           {products.map((product) => (
-            <div className="min-w-[328px]">
+            <div className="min-w-[328px] max-w-[328px]">
               <ProductCard
-                image={product.image}
+                image={product.images[0].url}
                 title={product.title}
                 description={product.description}
                 price={product.price}
                 cardwidth = '350px'
               cardHeight= '350px'
+              slug={product.slug}
               />
             </div>
           ))}

@@ -80,6 +80,8 @@ model Product {
   description     String
   discount        Float?
   isTopRated      Boolean?
+  isFeatured      Boolean?
+  isPopular       Boolean?
   price           Float
   stock           Int
   subcategorySlug String       

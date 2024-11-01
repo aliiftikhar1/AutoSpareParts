@@ -71,7 +71,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ status: true, data: subcategories });
+    return NextResponse.json({ status: 200, data: subcategories });
   } catch (error) {
     console.error('Error fetching subcategories:', error);
     return NextResponse.json(

@@ -1,27 +1,39 @@
 import React from 'react';
+import { useState,useEffect } from 'react';
+import axios from 'axios';
 import { FaArrowRight } from 'react-icons/fa';
 
 export default function AllBrands() {
-    const brands = [
-        { id: 1, name: 'Audi', logo: '/brands/audi.png' },
-        { id: 2, name: 'Toyota', logo: '/brands/toyota.png' },
-        { id: 3, name: 'Honda', logo: '/brands/honda.png' },
-        { id: 4, name: 'Kia', logo: '/brands/kia.png' },
-        { id: 5, name: 'Suzuki', logo: '/brands/suzuki.png' },
-        { id: 6, name: 'Hyundai', logo: '/brands/hyundai.png' },
-    ];
+    
+    const [make, setmake] = useState([]);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('/api/make');
+
+                console.log("TOP RADET Products are: ", response.data);
+                setmake(response.data); // Assuming the API returns products in `data.data`
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     return (
         <div className="px-12 w-full h-auto flex flex-col py-8">
             <h1 className="text-2xl font-semibold mb-6">All Brands</h1>
             <div className="grid grid-cols-7 items-center overflow-x-auto w-80%">
-                {brands.map((brand) => (
+            {make.slice(0, 5).map((brand) => (
                     <div 
                         key={brand.id} 
                         className="w-40 h-40 flex flex-col items-center justify-center bg-white border border-gray-200 rounded-lg shadow-md p-4"
                     >
-                        <img src={brand.logo} alt={brand.name} className="w-20 h-20 object-contain mb-2" />
-                        <p className="text-sm font-medium text-gray-700 uppercase">{brand.name}</p>
+                        <img 
+                        src={`${process.env.NEXT_PUBLIC_UPLOADED_IMAGE_URL}/${brand.image}`} 
+                         alt={brand.image} className="w-20 h-20 object-contain mb-2" />
+                        <p className="text-sm font-medium text-gray-700 uppercase">{brand.make}</p>
                     </div>
                 ))}
                 {/* Show All Brands Link */}

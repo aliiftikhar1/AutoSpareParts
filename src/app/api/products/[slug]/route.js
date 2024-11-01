@@ -14,11 +14,16 @@ export async function PUT(request, { params }) {
       colors,
       sizes,
       discount,
-      isTopRated = false,
-      images, // Array of image filenames
+      isTopRated,
+      isPopular,
+      isFeatured,
+      images,
       meta_title,
       meta_description,
       meta_keywords,
+      makeId,
+      modelId,
+      yearId,
     } = await request.json();
 
     // Ensure that images are passed as an array of filenames (without URLs)
@@ -41,11 +46,13 @@ export async function PUT(request, { params }) {
         description,
         price: parseFloat(price),
         stock: parseInt(stock, 10),
-        subcategorySlug,
+        subcategory: { connect: { slug: subcategorySlug } },
         colors: JSON.stringify(colors),
         sizes: JSON.stringify(sizes),
         discount: discount ? parseFloat(discount) : null,
-        isTopRated,
+        isTopRated: Boolean(isTopRated),
+        isPopular: Boolean(isPopular),
+        isFeatured: Boolean(isFeatured),
         meta_title,
         meta_description,
         meta_keywords,
@@ -54,6 +61,9 @@ export async function PUT(request, { params }) {
           create: imageFilenames.map((filename) => ({ url: filename })), // Store only filenames
         },
         updatedAt: new Date(),
+        make: makeId ? { connect: { id: makeId } } : undefined,
+        model: modelId ? { connect: { id: modelId } } : undefined,
+        year: yearId ? { connect: { id: yearId } } : undefined,
       },
     });
 

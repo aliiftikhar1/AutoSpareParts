@@ -1,30 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import OnePartDetailCard from "./OnePartDetailCard";
 
 export default function PopularParts() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const popularParts = [
-        { id: 1, image: "/spareparts/sparepart1.png", title: "Audi Engine", description: "Audi Engine complete A3/A4/A5/A6", feature1: "High Performance", feature2: "Durable Build", feature3: "Warranty Included", price: "1,200,000", discountedPrice: "1,000,000" },
-        { id: 2, image: "/spareparts/spare part (1).png", title: "Bosch 3330", description: "4.0 D5 PowerPulse Momentum 5dr AWD Geartronic", feature1: "High Efficiency", feature2: "Long Life", feature3: "Reliable Quality", price: "3,000,000", discountedPrice: "2,700,000" },
-        { id: 3, image: "/spareparts/spare part (1).jpg", title: "Shock Absorbers", description: "Absorb or dampen the compression as needed", feature1: "Smooth Ride", feature2: "Premium Quality", feature3: "Affordable Price", price: "50,000", discountedPrice: "45,000" },
-        { id: 4, image: "/spareparts/spare part (2).png", title: "Brake Disk", description: "Hyundai i20 compatible brake disk", feature1: "Durable Material", feature2: "Precision Engineering", feature3: "Reliable Stopping Power", price: "21,800", discountedPrice: "20,000" },
-        { id: 5, image: "/spareparts/spare part (3).png", title: "Pirelli Cinturato P7", description: "Pirelli Cinturato P7 Tyres starting from Rs 42,000", feature1: "All-Weather Grip", feature2: "Enhanced Mileage", feature3: "Safety Tested", price: "42,000", discountedPrice: "40,000" },
-        { id: 6, image: "/spareparts/sparepart1.png", title: "Audi Engine - New", description: "Enhanced Audi Engine with better performance", feature1: "Upgraded Model", feature2: "Fuel Efficient", feature3: "Lower Emissions", price: "1,500,000", discountedPrice: "1,250,000" },
-        { id: 7, image: "/spareparts/spare part (1).png", title: "Bosch 3330 - Turbo", description: "Bosch engine with turbo compatibility", feature1: "Turbo Compatibility", feature2: "High Power Output", feature3: "Reliable Performance", price: "3,200,000", discountedPrice: "2,900,000" },
-        { id: 8, image: "/spareparts/spare part (3).png", title: "Pirelli P Zero", description: "Pirelli P Zero high-performance tyres", feature1: "Ultimate Grip", feature2: "Racing Quality", feature3: "Enhanced Durability", price: "60,000", discountedPrice: "55,000" },
-    ];
+    const [popularparts, setpopularparts] = useState([]);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('/api/products/popularParts');
 
+                console.log("TOP RADET Products are: ", response.data.data);
+                setpopularparts(response.data.data); // Assuming the API returns products in `data.data`
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+    const calculateDiscountedPrice = (price, discount) => {
+        if (!price || !discount) return price; // If no discount, return original price
+        return price - (price * discount) / 100;
+    };
     const handleNext = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex < popularParts.length - 1 ? prevIndex + 1 : 0
+            prevIndex < popularparts.length - 1 ? prevIndex + 1 : 0
         );
     };
 
     const handlePrev = () => {
         setCurrentIndex((prevIndex) =>
-            prevIndex > 0 ? prevIndex - 1 : popularParts.length - 1
+            prevIndex > 0 ? prevIndex - 1 : popularparts.length - 1
         );
     };
 
@@ -45,17 +54,18 @@ export default function PopularParts() {
                         className="flex transition-transform duration-300 space-x-4"
                         style={{ transform: `translateX(-${currentIndex * 50}%)` }}
                     >
-                        {popularParts.map((part, index) => (
+                        {popularparts.map((part, index) => (
 
                             <OnePartDetailCard
-                                image={part.image}
-                                title={part.title}
+                                image={part.images[0].url}
+                                title={part.name}
                                 description={part.description}
-                                feature1={part.feature1}
-                                feature2={part.feature2}
-                                feature3={part.feature3}
-                                price={part.price}
-                                discountedPrice={part.discountedPrice}
+                                // feature1={part.feature1}
+                                // feature2={part.feature2}
+                                // feature3={part.feature3}
+                                price={(part.price).toLocaleString()}
+                                discountedPrice={calculateDiscountedPrice(part.price, part.discount).toLocaleString()}
+                                slug={part.slug}
                             />
 
                         ))}
