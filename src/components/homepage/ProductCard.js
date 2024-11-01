@@ -25,11 +25,11 @@ function ProductCard({ image, title, description, price, cardHeight,slug }) {
       {/* Price and Button */}
       <div className="flex justify-between items-center mt-2 border-t border-gray-200 pt-3">
         <div className="text-[14px] font-bold text-gray-800">Rs {price}</div>
-        <Link href={`/customer/pages/products/${slug}`}>
+        <a href={`/customer/pages/products/${slug}`}>
         <button className="text-red-600 w-28 justify-center font-500 flex items-center hover:bg-red-600 hover:text-white transition border p-2 border-red-600 hover:border-white">
           View Details <FaArrowRight className="ml-1 transform -rotate-45" />
         </button>
-        </Link>
+        </a>
       </div>
     </div>
   );

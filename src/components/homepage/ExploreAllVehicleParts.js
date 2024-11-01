@@ -62,7 +62,7 @@ export default function ExploreAllVehicleParts() {
             <div className="min-w-[328px] max-w-[328px]">
               <ProductCard
                 image={product.images[0].url}
-                title={product.title}
+                title={product.name}
                 description={product.description}
                 price={product.price}
                 cardwidth = '350px'
